@@ -1,0 +1,22 @@
+{
+  "name": "medi-base",
+  "description": "online patient appointment system",
+  "main": "main.js",
+  "authors": [
+    "amit and friends"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "medi-base",
+  "version": "1.0.0",
+  "description": "online patient appointment system",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "amit and friends",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "bower": "^1.7.9",
+    "express": "^4.13.4",
+    "mysql": "^2.10.2",
+    "yo": "^1.7.0"
+  }
+}
