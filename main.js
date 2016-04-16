@@ -18,10 +18,7 @@ app.use(bodyParser.urlencoded({
 
 // database connection setup
 var connection = mysql.createConnection({
-  host     : 'www.db4free.net',
-  user     : 'softenghospital',
-  password : 'softenghospital',
-  database : 'hospitaldb'
+
 });
 
 
