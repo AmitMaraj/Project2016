@@ -143,6 +143,7 @@ function addUser (req) {
 		}
 		else
 			return true;
+	});
 }
 
 app.listen(app.get('port'), function () {
