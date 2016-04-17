@@ -31,11 +31,28 @@
 	<div class="container" align="center">
 		<button class="btn btn-primary" onclick="getAppointmentsWeek()">Weekly Appointments</button>
 		<button class="btn btn-primary" onclick="getAppointments()">All Appointments</button>
+		<button class="btn btn-primary" onclick="getSurgery()">Surgery</button>
 	</div>
 	
 	<div id="calendar">
 		
 	</div>
+
+	<table style="display: none" id="surgery" width="100%" class="row-border table-striped table-bordered" cellspacing="0">
+		<thead>
+			<tr>
+				<th>Surgery ID</th>
+				<th>Doctor ID</th>
+				<th>Doctor Name</th>
+				<th>Room</th>
+				<th>Patient ID</th>
+				<th>Patient Name</th>
+				<th>Date/Time</th>
+				<th>Details</th>
+			</tr>
+		</thead>
+	</table>
+
 
 	<table id="appointment" width="100%" class="row-border table-striped table-bordered" cellspacing="0">
 
@@ -44,11 +61,9 @@
 			<tr>
 				<th>Appointment ID</th>
 				<th>Patient ID</th>
-				<th>First Name</th>
-				<th>Last Name</th>
+				<th>Name</th>
 				<th>Hospital ID</th>
 				<th>Doctor ID</th>
-				<th>Surgery ID</th>
 				<th>Date</th>
 				<th>Details</th>
 			</tr>

@@ -17,11 +17,9 @@ function tableInit(dat){
 		"columns":[
 			{data:"AppointmentID"},
 			{data:"PatientID"},
-			{data:"firstname"},
-			{data:"lastname"},
+			{data:"Name"},
 			{data:"HospitalID"},
 			{data:"DoctorID"},
-			{data:"SurgeryID"},
 			{data:"date"},
 			{data:"details"}
 		]
@@ -38,6 +36,14 @@ function getAppointmentsWeek(){
 
 function getAppointments () {
 	$.get('/api/getAppointments',function(dat,status){
+		if(dat)
+			tableInit(dat);
+		console.log(status);
+	});	 
+}
+
+function getSurgery () {
+	  $.get('/api/getSurger',function(dat,status){
 		if(dat)
 			tableInit(dat);
 		console.log(status);
