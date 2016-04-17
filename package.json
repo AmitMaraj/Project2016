@@ -4,7 +4,8 @@
   "description": "online patient appointment system",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "./node_modules/.bin/bower install",
+    "start": "node main.js"
   },
   "author": "amit and friends",
   "license": "ISC",
