@@ -15,7 +15,21 @@
 
 <body>
 
-	<table id="appointment" width="100%" class="row-border" cellspacing="0">
+	<div  class="page-header" align="center">
+	<h1>Appointment Schedule</h1> 
+	</div>
+
+	<!-- <div id="thead">
+		<h1 ><small>Appointments this week</small></h1>
+	</div > -->
+
+	<div class="container" align="center">
+		<button class="btn btn-primary" onclick="getAppointmentsWeek()">Weekly Appointments</button>
+		<button class="btn btn-primary" onclick="getAppointments()">All Appointments</button>
+	</div>
+	
+
+	<table id="appointment" width="100%" class="row-border table-striped table-bordered" cellspacing="0">
 
 		<thead>
 

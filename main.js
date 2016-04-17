@@ -18,7 +18,10 @@ app.use(bodyParser.urlencoded({
 
 // database connection setup
 var connection = mysql.createConnection({
-
+	host     : 'www.db4free.net',
+  	user     : 'softenghospital',
+  	password : 'softenghospital',
+  	database : 'hospitaldb'
 });
 
 
@@ -33,7 +36,9 @@ connection.connect(function(err) {
 });
 
 
+// user request for homepage
 app.get('/', function (req, res) {
+
     console.log("request for homepage received\n\nredirect to index.html\n");
     res.sendFile(serverPath + 'index.html');
 });
@@ -57,6 +62,24 @@ app.get('/api/getAppointmentsWeek', function(req,res){
 app.get('/api/getAppointments', function(req,res){
 
 	connection.query('SELECT * FROM `appointment`',function(err,results){
+		res.json(results);
+	});
+
+});
+
+
+app.get('/api/getAppointmentsDoctor', function(req,res){
+
+	connection.query('SELECT * FROM `appointment` WHERE DoctorID="'+req.body.doctorID+'"',function(err,results){
+		res.json(results);
+	});
+
+});
+
+
+app.get('/api/getAppointmentPatient', function(req,res){
+
+	connection.query('SELECT * FROM `appointment` WHERE PatientID="'+req.body.patientID+'"',function(err,results){
 		res.json(results);
 	});
 
