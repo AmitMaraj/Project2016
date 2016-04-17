@@ -48,9 +48,12 @@ app.get('/', function (req, res) {
 	returns all appointments for the current week as a JSON Object.
 */
 app.get('/api/getAppointmentsWeek', function(req,res){
-
-	connection.query('SELECT * FROM `appointment` WHERE WEEKOFYEAR(date) = WEEKOFYEAR(NOW())',function(err,results){
-		res.json(results);
+// SELECT * FROM `appointment` WHERE WEEKOFYEAR(date) = WEEKOFYEAR(NOW())
+	connection.query('SELECT a.AppointmentID, a.PatientID, p.firstname, p.lastname, a.HospitalID, a.DoctorID, a.SurgeryID, a.date, a.details FROM `appointment` AS a INNER JOIN `patientinfo` AS p ON a.PatientID=p.PatientID AND WEEKOFYEAR(date) = WEEKOFYEAR(NOW())',function(err,results){
+		if(err)
+			console.log(err);
+		else
+			res.json(results);
 	});
 
 });
@@ -61,8 +64,11 @@ app.get('/api/getAppointmentsWeek', function(req,res){
 */
 app.get('/api/getAppointments', function(req,res){
 
-	connection.query('SELECT * FROM `appointment`',function(err,results){
-		res.json(results);
+	connection.query('SELECT a.AppointmentID, a.PatientID, p.firstname, p.lastname, a.HospitalID, a.DoctorID, a.SurgeryID, a.date, a.details FROM `appointment` AS a INNER JOIN `patientinfo` AS p ON a.PatientID=p.PatientID',function(err,results){
+		if(err)
+			console.log(err);
+		else
+			res.json(results);
 	});
 
 });
@@ -71,7 +77,10 @@ app.get('/api/getAppointments', function(req,res){
 app.get('/api/getAppointmentsDoctor', function(req,res){
 
 	connection.query('SELECT * FROM `appointment` WHERE DoctorID="'+req.body.doctorID+'"',function(err,results){
-		res.json(results);
+		if(err)
+			console.log(err);
+		else
+			res.json(results);
 	});
 
 });
@@ -80,7 +89,10 @@ app.get('/api/getAppointmentsDoctor', function(req,res){
 app.get('/api/getAppointmentPatient', function(req,res){
 
 	connection.query('SELECT * FROM `appointment` WHERE PatientID="'+req.body.patientID+'"',function(err,results){
-		res.json(results);
+		if(err)
+			console.log(err);
+		else
+			res.json(results);
 	});
 
 });
