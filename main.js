@@ -8,7 +8,7 @@ var express = require('express'),
 app.set('port', process.env.PORT || 5000);
 
 // static path to the public folder for client files to display
-var serverPath = __dirname + '/public';
+var serverPath = __dirname + '/public/';
 app.use(express.static(serverPath));
 
 // parse application/json http body
@@ -44,7 +44,7 @@ connection.connect(function (err) {
 app.get('/', function (req, res) {
 
     console.log("request for homepage received\n\nredirect to index.html\n");
-    res.sendFile(serverPath + 'index.html');
+    res.sendFile(serverPath+'user.html');
 });
 
 
@@ -52,12 +52,14 @@ app.get('/', function (req, res) {
 	returns all appointments for the current week as a JSON Object.
 */
 app.get('/api/getAppointmentsWeek', function (req, res) {
-	// SELECT * FROM `appointment` WHERE WEEKOFYEAR(date) = WEEKOFYEAR(NOW())
-	connection.query('SELECT a.AppointmentID, a.PatientID, CONCAT_WS(" ",p.firstname, p.lastname) AS Name, a.HospitalID, a.DoctorID, a.date, a.details FROM `appointment` AS a INNER JOIN `patientinfo` AS p ON a.PatientID=p.PatientID AND WEEKOFYEAR(date) = WEEKOFYEAR(NOW())', function (err, results) {
+	// SELECT a.AppointmentID, a.PatientID, CONCAT_WS(" ",p.firstname, p.lastname) AS Name, a.HospitalID, a.DoctorID, a.date, a.details FROM `appointment` AS a INNER JOIN `patientinfo` AS p ON a.PatientID=p.PatientID AND WEEKOFYEAR(date) = WEEKOFYEAR(NOW())
+	connection.query('SELECT CONCAT_WS(" ","Patient:",p.firstname, p.lastname,"\nDoctor ID:",a.DoctorID,"\nDetails:",a.details) AS title,DATE_FORMAT(a.date, "%Y-%m-%dT%TZ") AS start FROM `appointment` AS a INNER JOIN `patientinfo` AS p ON a.PatientID=p.PatientID AND WEEKOFYEAR(date) = WEEKOFYEAR(NOW())', function (err, results) {
 		if (err)
 			console.log(err);
-		else
+		else{
+			// console.log(results);
 			res.json(results);
+		}
 	});
 
 });
@@ -67,12 +69,13 @@ app.get('/api/getAppointmentsWeek', function (req, res) {
 	returns all appointments from the database as a  JSON object.
 */
 app.get('/api/getAppointments', function (req, res) {
-
-	connection.query('SELECT a.AppointmentID, a.PatientID, CONCAT_WS(" ",p.firstname, p.lastname) AS Name, a.HospitalID, a.DoctorID, a.date, a.details FROM `appointment` AS a INNER JOIN `patientinfo` AS p ON a.PatientID=p.PatientID', function (err, results) {
+	connection.query('SELECT CONCAT_WS(" ","Patient:",p.firstname, p.lastname,"\nDoctor ID:",a.DoctorID,"\nDetails:",a.details) AS title, DATE_FORMAT(a.date, "%Y-%m-%dT%TZ") AS start FROM `appointment` AS a INNER JOIN `patientinfo` AS p ON a.PatientID=p.PatientID', function (err, results) {
 		if (err)
 			console.log(err);
-		else
+		else{
+			// console.log(results);
 			res.json(results);
+		}
 	});
 
 });

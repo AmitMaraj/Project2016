@@ -2,42 +2,35 @@
 $(document).ready(function() {
 	console.log('ready');
 
-	// $('#calendar').fullCalendar({
- //        fixedWeekCount:false,
- //        weekNumbers:true,
- //        events: '/api/getAppointments'
- //    });
+	$('#calendar').fullCalendar({ 
+		events:{
+			cache:true
+		},
+		
+	});
+
 });
 
-function tableInit(dat){
-	var t=$('#appointment').DataTable({
-		"data":dat,
-		"order":[[5,"asc"]],
-		"bDestroy": true,
-		"columns":[
-			{data:"AppointmentID"},
-			{data:"PatientID"},
-			{data:"Name"},
-			{data:"HospitalID"},
-			{data:"DoctorID"},
-			{data:"date"},
-			{data:"details"}
-		]
-	});	
+function initCalendar (dat) {
+	$("#calendar").fullCalendar('removeEvents');
+	$("#calendar").fullCalendar('addEventSource', dat);
+	$("#calendar").fullCalendar('rerenderEvents');
 }
 
 function getAppointmentsWeek(){
+	
 	$.get('/api/getAppointmentsWeek',function(dat,status){
 		if(dat)
-			tableInit(dat);
+			initCalendar(dat);
 		console.log(status);
 	});	
 }
 
 function getAppointments () {
+
 	$.get('/api/getAppointments',function(dat,status){
 		if(dat)
-			tableInit(dat);
+			initCalendar(dat);
 		console.log(status);
 	});	 
 }
@@ -49,3 +42,4 @@ function getSurgery () {
 		console.log(status);
 	});	 
 }
+
