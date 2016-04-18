@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MediBase</title>
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script type="text/javascript" src="js/main.js"></script>
+
+</head>
+
+
+<body>
+    <form name="form" method="POST" action="/api/user" enctype="multipart/form-data">
+        <input type="text" name="fname" placeholder="first name">
+        <input type="text" name="lname" placeholder="last name">
+        <input type="text" name="username" placeholder="username">
+        <input type="text" name="age" placeholder="age">
+        <input type="text" name="sex" placeholder="sex">
+        <input type="password" name="password" placeholder="password">
+        <input type="file" name="file" id="file" />
+        <button id="signupBtn" type="submit">sign up</button>
+    </form>
+
+</body>
+
+</html>
