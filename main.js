@@ -8,7 +8,7 @@ var express = require('express'),
 app.set('port', process.env.PORT || 5000);
 
 // static path to the public folder for client files to display
-var serverPath = __dirname + '/public/';
+var serverPath = __dirname + '/public';
 app.use(express.static(serverPath));
 
 // parse application/json http body
