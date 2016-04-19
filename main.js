@@ -42,14 +42,11 @@ connection.connect(function (err) {
 
 // user request for homepage
 app.get('/', function (req, res) {
-<<<<<<< HEAD
     console.log("request for homepage received");
     res.sendFile(serverPath+'scheduleSurgery.html');
-=======
 	
-    console.log("request for homepage received\n\nredirect to index.html\n");
-    res.sendFile(serverPath+'user.html');
->>>>>>> refs/remotes/origin/master
+    //console.log("request for homepage received\n\nredirect to index.html\n");
+    //res.sendFile(serverPath+'user.html');
 });
 
 
