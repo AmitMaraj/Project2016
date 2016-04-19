@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "bootstrap": "^3.3.6",
-    "fullcalendar": "^2.6.1"
+    "fullcalendar": "^2.6.1",
+    "hover": "Hover#^2.0.2"
   }
 }

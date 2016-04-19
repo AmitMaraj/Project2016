@@ -52,8 +52,8 @@ app.get('/', function (req, res) {
 	returns all appointments for the current week as a JSON Object.
 */
 app.get('/api/getAppointmentsWeek', function (req, res) {
-	// SELECT a.AppointmentID, a.PatientID, CONCAT_WS(" ",p.firstname, p.lastname) AS Name, a.HospitalID, a.DoctorID, a.date, a.details FROM `appointment` AS a INNER JOIN `patientinfo` AS p ON a.PatientID=p.PatientID AND WEEKOFYEAR(date) = WEEKOFYEAR(NOW())
-	connection.query('SELECT CONCAT_WS(" ","Patient:",p.firstname, p.lastname,"\nDoctor ID:",a.DoctorID,"\nDetails:",a.details) AS title,DATE_FORMAT(a.date, "%Y-%m-%dT%TZ") AS start FROM `appointment` AS a INNER JOIN `patientinfo` AS p ON a.PatientID=p.PatientID AND WEEKOFYEAR(date) = WEEKOFYEAR(NOW())', function (err, results) {
+// DATE_FORMAT(DATE_ADD(a.date,INTERVAL 2 HOUR),"%Y-%m-%dT%TZ") AS end 
+	connection.query('SELECT CONCAT_WS(" ","Patient:",p.firstname, p.lastname,"\nDoctor ID:",a.DoctorID,"\nTime:",DATE_FORMAT(a.date,"%h:%i"),"\nDetails:",a.details) AS title, DATE_FORMAT(a.date, "%Y-%m-%dT%TZ") AS start FROM `appointment` AS a INNER JOIN `patientinfo` AS p ON a.PatientID=p.PatientID AND WEEKOFYEAR(date) = WEEKOFYEAR(NOW())', function (err, results) {
 		if (err)
 			console.log(err);
 		else{
@@ -69,7 +69,7 @@ app.get('/api/getAppointmentsWeek', function (req, res) {
 	returns all appointments from the database as a  JSON object.
 */
 app.get('/api/getAppointments', function (req, res) {
-	connection.query('SELECT CONCAT_WS(" ","Patient:",p.firstname, p.lastname,"\nDoctor ID:",a.DoctorID,"\nDetails:",a.details) AS title, DATE_FORMAT(a.date, "%Y-%m-%dT%TZ") AS start FROM `appointment` AS a INNER JOIN `patientinfo` AS p ON a.PatientID=p.PatientID', function (err, results) {
+	connection.query('SELECT CONCAT_WS(" ","Patient:",p.firstname, p.lastname,"\nDoctor ID:",a.DoctorID,"\nTime:",DATE_FORMAT(a.date,"%h:%i"),"\nDetails:",a.details) AS title, DATE_FORMAT(a.date, "%Y-%m-%dT%TZ") AS start FROM `appointment` AS a INNER JOIN `patientinfo` AS p ON a.PatientID=p.PatientID', function (err, results) {
 		if (err)
 			console.log(err);
 		else{
