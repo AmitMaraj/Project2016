@@ -42,7 +42,7 @@ connection.connect(function (err) {
 
 // user request for homepage
 app.get('/', function (req, res) {
-
+	
     console.log("request for homepage received\n\nredirect to index.html\n");
     res.sendFile(serverPath+'user.html');
 });

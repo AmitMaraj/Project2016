@@ -14,15 +14,78 @@
 
 
 <body>
-    <form name="form" method="POST" action="/api/user" enctype="multipart/form-data">
-        <input type="text" name="fname" placeholder="first name">
-        <input type="text" name="lname" placeholder="last name">
-        <input type="text" name="username" placeholder="username">
-        <input type="text" name="age" placeholder="age">
-        <input type="text" name="sex" placeholder="sex">
-        <input type="password" name="password" placeholder="password">
-        <input type="file" name="file" id="file" />
-        <button id="signupBtn" type="submit">sign up</button>
+
+    <form class="form-horizontal" name="form" method="POST" action="/api/user" enctype="multipart/form-data">
+        <fieldset>
+
+            <!-- Form Name -->
+            <legend>Create Patient</legend>
+
+            <div class="form-group">
+                <label for="fname" class="control-label col-sm-2">First name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="fname" id="fname" placeholder="first name" required="">
+                    <p class="help-block">Enter first name</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="lname" class="control-label col-sm-2">Last name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="lname" id="lname" placeholder="last name" required="">
+                    <p class="help-block">last name</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="control-label col-sm-2">Username</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="username" id="username" placeholder="Username" required="">
+                    <p class="help-block">Enter username</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="age" class="control-label col-sm-2">Age</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="age" id="age" placeholder="Age" required="">
+                    <p class="help-block">Enter your age</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="sex" class="control-label col-sm-2">Sex</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="sex" id="sex" placeholder="Sex" required="">
+                    <p class="help-block">Enter your sex</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="control-label col-sm-2">Password</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Password" required="">
+                    <p class="help-block">Enter your Password</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="file" class="control-label col-sm-2">Picture</label>
+                <div class="col-sm-10">
+                    <input type="file" id="file" name="file" required="">
+                    <p class="help-block">upload a picture of your self</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="submit"></label>
+                <div class="text-left col-sm-10">
+                    <button type="submit" id="submit" name="submit" class="btn btn-primary" aria-label="">Button</button>
+                    <p class="help-block">Submit form</p>
+                </div>
+            </div>
+
+        </fieldset>
     </form>
 
 </body>
