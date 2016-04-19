@@ -43,7 +43,7 @@ connection.connect(function (err) {
 // user request for homepage
 app.get('/', function (req, res) {
     console.log("request for homepage received");
-    res.sendFile(serverPath+'scheduleSurgery.html');
+    res.sendFile(serverPath+'appointment.html');
 });
 
 
@@ -80,30 +80,6 @@ app.get('/api/getAppointments', function (req, res) {
 });
 
 
-app.get('/api/getAppointmentsDoctor', function (req, res) {
-
-	connection.query('SELECT * FROM `appointment` WHERE DoctorID="' + req.body.doctorID + '"', function (err, results) {
-		if (err)
-			console.log(err);
-		else
-			res.json(results);
-	});
-
-});
-
-
-app.get('/api/getAppointmentPatient', function (req, res) {
-
-	connection.query('SELECT * FROM `appointment` WHERE PatientID="' + req.body.patientID + '"', function (err, results) {
-		if (err)
-			console.log(err);
-		else
-			res.json(results);
-	});
-
-});
-
-
 /*
 	insert a surgery into the surgery table
 */
@@ -132,6 +108,23 @@ app.post('/api/getSurgeryRange', function (req,res) {
 	});
 
 });
+
+/*
+	Gets surgeries from the surgery table 
+*/
+app.get('/api/getSurgery', function (req, res) {
+
+	connection.query('SELECT CONCAT_WS(" ","Surgery ID:",s.SurgeryID,"\nRoom ID:",s.RoomID,"\nDoctor ID:",s.DoctorID,"\nPatient ID:",s.PatientID,"\nDetails:",s.details,"\nDuration",s.duration,"\nPriority",s.priority) AS title, DATE_FORMAT(s.date,"%Y-%m-%dT%TZ") AS start FROM `surgery` AS s WHERE date IS NOT NULL ORDER BY date ASC', function (err, results) {
+		if (err)
+			console.log(err);
+		else{
+			res.json(results);
+		}
+	});
+
+});
+
+
 
 /* checks to see if the patient already exist in database.
 	returns 1 if exist else 0;
