@@ -42,9 +42,14 @@ connection.connect(function (err) {
 
 // user request for homepage
 app.get('/', function (req, res) {
+<<<<<<< HEAD
+    console.log("request for homepage received");
+    res.sendFile(serverPath+'scheduleSurgery.html');
+=======
 	
     console.log("request for homepage received\n\nredirect to index.html\n");
     res.sendFile(serverPath+'user.html');
+>>>>>>> refs/remotes/origin/master
 });
 
 
@@ -105,17 +110,34 @@ app.get('/api/getAppointmentPatient', function (req, res) {
 });
 
 
-app.get('/api/getSurgery', function (req, res) {
+/*
+	insert a surgery into the surgery table
+*/
+app.post('/api/scheduleSurgery', function (req,res){
 
-	connection.query('SELECT * FROM `appointment` WHERE PatientID="' + req.body.patientID + '"', function (err, results) {
+	connection.query('INSERT INTO `surgery` (`details`, `PatientID`, `DoctorID`, `RoomID`, `start`, `end`, `duration`, `priority`) VALUES (NULL,"'+req.body.choosePatient+'","'+req.body.chooseDoctor+'",(SELECT RoomID FROM `room` ORDER BY RAND() LIMIT 1) ,NULL,NULL,NULL,"'+req.body.priority+'")', function (err, results) {
+		if (err){
+			console.log(err);
+			res.send('0');		}
+		else{
+			res.send('1');
+		}
+	});
+	res.sendFile(serverPath+'scheduleSurgery.html');
+});
+
+
+
+app.post('/api/getSurgeryRange', function (req,res) {
+	  
+	connection.query('SELECT * FROM `temp` WHERE date BETWEEN DATE("'+req.body.start+'") AND DATE("'+req.body.end+'")', function (err, results) {
 		if (err)
 			console.log(err);
 		else
 			res.json(results);
 	});
+
 });
-
-
 
 /* checks to see if the patient already exist in database.
 	returns 1 if exist else 0;

@@ -54,11 +54,8 @@ function getAppointments () {
 	});	 
 }
 
-function getSurgery () {
-	  $.get('/api/getSurger',function(dat,status){
-		if(dat)
-			tableInit(dat);
-		console.log(status);
-	});	 
+function postSurgery () {
+	 $('#surgeryForm').submit(function(){
+	 	$('#surgeryForm').trigger('reset');	
+	 });
 }
-
