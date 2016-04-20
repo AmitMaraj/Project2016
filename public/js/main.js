@@ -55,7 +55,16 @@ function getAppointments () {
 }
 
 function postSurgery () {
-	 $('#surgeryForm').submit(function(){
-	 	$('#surgeryForm').trigger('reset');	
-	 });
+	$('#surgeryForm').submit(function(){
+		$('#surgeryForm').trigger('reset');	
+	});
+}
+
+function getSurgery () {
+ 	$.get('/api/getSurgery',function(dat,status){
+		if(dat){
+			initCalendar(dat);
+			$('#calendar').fullCalendar('changeView','month');
+		}
+	});	 
 }
