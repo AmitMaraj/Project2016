@@ -5,6 +5,11 @@ var express = require('express'),
 	fs = require('fs'),
     app = express();
 
+
+// modules
+var DBACCESS = require('./DBConnection');
+
+
 app.set('port', process.env.PORT || 5000);
 
 // static path to the public folder for client files to display
@@ -21,12 +26,11 @@ app.use(busboy());
 
 
 // database connection setup
-var connection = mysql.createConnection({
-	host: 'www.db4free.net',
-	user: 'softenghospital',
-	password: 'softenghospital',
-	database: 'hospitaldb'
-});
+var connection = DBACCESS.returnDBConnection();
+var SCHEDULING = require('./Functions/scheduling');
+SCHEDULING.runSchedule();
+
+
 
 
 // connect to database
@@ -37,13 +41,14 @@ connection.connect(function (err) {
 	}
 
 	console.log('Successfully connected to database as id ' + connection.threadId);
+	SurgeryData();
 });
 
 
 // user request for homepage
 app.get('/', function (req, res) {
     console.log("request for homepage received");
-    res.sendFile(serverPath+'appointment.html');
+    res.sendFile(serverPath + 'scheduleSurgery.html');
 });
 
 
@@ -51,11 +56,11 @@ app.get('/', function (req, res) {
 	returns all appointments for the current week as a JSON Object.
 */
 app.get('/api/getAppointmentsWeek', function (req, res) {
-// DATE_FORMAT(DATE_ADD(a.date,INTERVAL 2 HOUR),"%Y-%m-%dT%TZ") AS end 
+	// DATE_FORMAT(DATE_ADD(a.date,INTERVAL 2 HOUR),"%Y-%m-%dT%TZ") AS end 
 	connection.query('SELECT CONCAT_WS(" ","Patient:",p.firstname, p.lastname,"\nDoctor ID:",a.DoctorID,"\nTime:",DATE_FORMAT(a.date,"%h:%i"),"\nDetails:",a.details) AS title, DATE_FORMAT(a.date, "%Y-%m-%dT%TZ") AS start FROM `appointment` AS a INNER JOIN `patientinfo` AS p ON a.PatientID=p.PatientID AND WEEKOFYEAR(date) = WEEKOFYEAR(NOW())', function (err, results) {
 		if (err)
 			console.log(err);
-		else{
+		else {
 			// console.log(results);
 			res.json(results);
 		}
@@ -71,7 +76,7 @@ app.get('/api/getAppointments', function (req, res) {
 	connection.query('SELECT CONCAT_WS(" ","Patient:",p.firstname, p.lastname,"\nDoctor ID:",a.DoctorID,"\nTime:",DATE_FORMAT(a.date,"%h:%i"),"\nDetails:",a.details) AS title, DATE_FORMAT(a.date, "%Y-%m-%dT%TZ") AS start FROM `appointment` AS a INNER JOIN `patientinfo` AS p ON a.PatientID=p.PatientID', function (err, results) {
 		if (err)
 			console.log(err);
-		else{
+		else {
 			// console.log(results);
 			res.json(results);
 		}
@@ -83,24 +88,25 @@ app.get('/api/getAppointments', function (req, res) {
 /*
 	insert a surgery into the surgery table
 */
-app.post('/api/scheduleSurgery', function (req,res){
+app.post('/api/scheduleSurgery', function (req, res) {
 
-	connection.query('INSERT INTO `surgery` (`details`, `PatientID`, `DoctorID`, `RoomID`, `start`, `end`, `duration`, `priority`) VALUES (NULL,"'+req.body.choosePatient+'","'+req.body.chooseDoctor+'",(SELECT RoomID FROM `room` ORDER BY RAND() LIMIT 1) ,NULL,NULL,NULL,"'+req.body.priority+'")', function (err, results) {
-		if (err){
+	connection.query('INSERT INTO `surgery` (`details`, `PatientID`, `DoctorID`, `RoomID`, `start`, `end`, `duration`, `priority`) VALUES (NULL,"' + req.body.choosePatient + '","' + req.body.chooseDoctor + '",(SELECT RoomID FROM `room` ORDER BY RAND() LIMIT 1) ,NULL,NULL,NULL,"' + req.body.priority + '")', function (err, results) {
+		if (err) {
 			console.log(err);
-			res.send('0');		}
-		else{
+			res.send('0');
+		}
+		else {
 			res.send('1');
 		}
 	});
-	res.sendFile(serverPath+'scheduleSurgery.html');
+	res.sendFile(serverPath + 'scheduleSurgery.html');
 });
 
 
 
-app.post('/api/getSurgeryRange', function (req,res) {
-	  
-	connection.query('SELECT * FROM `temp` WHERE date BETWEEN DATE("'+req.body.start+'") AND DATE("'+req.body.end+'")', function (err, results) {
+app.post('/api/getSurgeryRange', function (req, res) {
+
+	connection.query('SELECT * FROM `temp` WHERE date BETWEEN DATE("' + req.body.start + '") AND DATE("' + req.body.end + '")', function (err, results) {
 		if (err)
 			console.log(err);
 		else
@@ -129,26 +135,26 @@ app.get('/api/getSurgery', function (req, res) {
 /* checks to see if the patient already exist in database.
 	returns 1 if exist else 0;
 */
-app.post('/api/checkUser', function(req,res){
+app.post('/api/checkUser', function (req, res) {
 
-	var sql='SELECT `lastname`, `firstname` FROM `patientinfo` WHERE `lastname`="'+req.body.lastname+'" AND `firstname`="'+req.body.firstname+'"';
+	var sql = 'SELECT `lastname`, `firstname` FROM `patientinfo` WHERE `lastname`="' + req.body.lastname + '" AND `firstname`="' + req.body.firstname + '"';
 
-	connection.query(sql,function(err,rows){
+	connection.query(sql, function (err, rows) {
 		if (err) {
-			console.log("Error checking for user"+ err);
-			res.send('0');	
+			console.log("Error checking for user" + err);
+			res.send('0');
 			return;
 		}
-		else if(rows.length == 1){
+		else if (rows.length == 1) {
 			console.log(rows);
-			if(addUser(req))
+			if (addUser(req))
 				res.send('1');
 			else
 				res.send('0');
 			return;
 		}
-		
-		res.send('0');	
+
+		res.send('0');
 	});
 });
 
@@ -171,7 +177,7 @@ app.post('/api/user', function (req, res) {
 
 	var fstream, user = {}, full, thumb;
 	req.pipe(req.busboy);
-	
+
 	req.busboy.on('field', function (fieldname, val) {
 		if (fieldname == 'fname')
 			user.fname = val;
@@ -198,7 +204,7 @@ app.post('/api/user', function (req, res) {
 				fstream = fs.createWriteStream(full);
 
 				var sql = "INSERT INTO `patientinfo`(`img`, `lastname`, `firstname`, `age`, `sex`, `username`, `password`) VALUES ('" + filename + "','" + user.lname + "','" + user.fname + "','" + user.age + "','" + user.sex + "','" + user.username + "','" + user.password + "')";
-				
+
 				connection.query(sql, function (err, results) {
 					if (err) {
 						console.log("Error checking for user" + err);
@@ -207,16 +213,16 @@ app.post('/api/user', function (req, res) {
 					} else {
 						console.log("data uploading");
 						file.pipe(fstream);
-						
-						fstream.on('close',function(){
+
+						fstream.on('close', function () {
 							res.redirect('/index.html');
 						});
 					}
 				});
-			} else{
+			} else {
 				res.redirect('/');
 			}
-		}else {
+		} else {
 			console.log("picture isn't uploaded\n");
 		}
 	});
@@ -229,3 +235,16 @@ app.post('/api/user', function (req, res) {
 app.listen(app.get('port'), function () {
     console.log("Application Started on port: " + app.get('port') + "\n");
 });
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
