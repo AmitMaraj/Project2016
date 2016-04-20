@@ -137,18 +137,11 @@ app.post('/api/checkUser', function(req,res){
 		if (err) {
 			console.log("Error checking for user"+ err);
 			res.send('0');	
-			return;
 		}
 		else if(rows.length == 1){
-			console.log(rows);
-			if(addUser(req))
-				res.send('1');
-			else
-				res.send('0');
-			return;
+			res.send('1');
 		}
-		
-		res.send('0');	
+
 	});
 });
 
