@@ -3,6 +3,7 @@ var express = require('express'),
 	mysql = require('mysql'),
 	busboy = require('connect-busboy'),
 	fs = require('fs'),
+	CryptoJS = require('crypto-js'),
     app = express();
 
 app.set('port', process.env.PORT || 5000);
@@ -25,7 +26,8 @@ var connection = mysql.createConnection({
 	host: 'www.db4free.net',
 	user: 'softenghospital',
 	password: 'softenghospital',
-	database: 'hospitaldb'
+	database: 'hospitaldb',
+	multipleStatements: true
 });
 
 
@@ -43,7 +45,7 @@ connection.connect(function (err) {
 // user request for homepage
 app.get('/', function (req, res) {
     console.log("request for homepage received");
-    res.sendFile(serverPath+'appointment.html');
+    res.sendFile(serverPath+'login.html');
 });
 
 
@@ -130,25 +132,38 @@ app.get('/api/getSurgery', function (req, res) {
 	returns 1 if exist else 0;
 */
 app.post('/api/checkUser', function(req,res){
-
-	var sql='SELECT `lastname`, `firstname` FROM `patientinfo` WHERE `lastname`="'+req.body.lastname+'" AND `firstname`="'+req.body.firstname+'"';
-
-	connection.query(sql,function(err,rows){
-		if (err) {
-			console.log("Error checking for user"+ err);
-			res.send('0');	
+	console.log(req.body);
+	if(checkForDoctor(req)){
+			res.sendFile(serverPath+'appointment.html');
+			return;
 		}
-		else if(rows.length == 1){
-			res.send('1');
+	var sql='SELECT `username`, `password` FROM `patientinfo` WHERE username="'+req.body.username+'" AND password="'+req.body.password+'"';
+	connection.query(sql,function(err,results){
+		if (err||results==null) {
+			console.log("Error checking for user "+ err);
+			res.redirect('back');	
 		}
-
+		else if(results.length>0){
+			console.log(results);
+			res.sendFile(serverPath+'makeAppointment.html');
+		}
 	});
 });
 
+function checkForDoctor (req) {
+	var sql2='SELECT `DoctorID` FROM `doctor` WHERE username="'+req.body.username+'" AND password="'+req.body.password+'"' ; 
+	connection.query(sql2,function(err,results){
+		if(err)
+			console.log(err);
+		if(results.length>0){
+			return true;
+		}
+	});
+}
 
-
-function addUser(req) {
-	connection.query('INSERT INTO `patientinfo`(`lastname`, `firstname`, `age`, `sex`, `username`, `password`) VALUES ("' + req.body.lastname + '","' + req.body.firstname + '","' + req.body.age + '","' + req.body.sex + '","' + req.body.username + '","' + CryptoJS.SHA1(req.body.password).toString() + '"', function (err, results) {
+app.post('api/user',function(req,res) {
+	console.log(req.body);
+	connection.query('INSERT INTO `patientinfo`(`lastname`, `firstname`, `age`, `sex`, `username`, `password`) VALUES ("' + req.body.lname + '","' + req.body.fname + '","' + req.body.age + '","' + req.body.sex + '","' + req.body.username + '","' + CryptoJS.SHA1(req.body.password) + '"', function (err, results) {
 		if (err) {
 			console.log(err);
 			return false;
@@ -156,7 +171,7 @@ function addUser(req) {
 		else
 			return true;
 	});
-}
+});
 
 
 
@@ -207,7 +222,7 @@ app.post('/api/user', function (req, res) {
 					}
 				});
 			} else{
-				res.redirect('/');
+				res.redirect('back');
 			}
 		}else {
 			console.log("picture isn't uploaded\n");

@@ -5,14 +5,13 @@
     <title>MediBase</title>
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
     <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <script type="text/javascript" src="js/formScript.js"></script>
 
 </head>
 
 
 <body>
 
-    <form class="form-horizontal" action="/api/checkUser" method="post">
+    <form class="form-horizontal" id="loginForm" method="post" action="/api/checkUser">
         <fieldset>
 
 
@@ -42,7 +41,7 @@
         <div class="form-group">
           <label class="control-label col-sm-2" for="login"></label>
           <div class="text-left col-sm-10">
-            <button type="submit" id="login" name="login" class="btn btn-primary" aria-label="" onclick="checkUser()">Log In</button>
+            <button id="login" name="login" class="btn btn-primary" aria-label="" >Log In</button>
             
           </div>
         </div>
@@ -51,7 +50,7 @@
         <div class="form-group">
           <label class="control-label col-sm-2" for="user"></label>
           <div class="text-right col-sm-10">
-            <button type="button" id="user" name="user" class="btn btn-primary" aria-label="">Already a Patient?</button>
+            <button onclick="window.location.href='user.html'" type="button" id="user" name="user" class="btn btn-primary" aria-label="">Already a Patient?</button>
             
           </div>
         </div>
@@ -61,6 +60,7 @@
         </form>
     
         <div id="invalid"></div>
+
 
 </body>
 
