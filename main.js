@@ -11,6 +11,7 @@ app.set('port', process.env.PORT || 5000);
 // static path to the public folder for client files to display
 var serverPath = __dirname + '/public/';
 app.use(express.static(serverPath));
+app.use(express.static(__dirname + '/public/js/)'));
 
 // parse application/json http body
 app.use(bodyParser.json());
@@ -133,33 +134,38 @@ app.get('/api/getSurgery', function (req, res) {
 */
 app.post('/api/checkUser', function(req,res){
 	console.log(req.body);
-	if(checkForDoctor(req)){
-			res.sendFile(serverPath+'appointment.html');
-			return;
-		}
+	var r=false;
 	var sql='SELECT `username`, `password` FROM `patientinfo` WHERE username="'+req.body.username+'" AND password="'+req.body.password+'"';
+	var sql2='SELECT `DoctorID` FROM `doctor` WHERE username="'+req.body.username+'" AND password="'+req.body.password+'"' ; 
 	connection.query(sql,function(err,results){
-		if (err||results==null) {
-			console.log("Error checking for user "+ err);
+		console.log(results);
+		if (err) {
 			res.redirect('back');	
 		}
-		else if(results.length>0){
+		if(results.length==1){
 			console.log(results);
 			res.sendFile(serverPath+'makeAppointment.html');
 		}
+		else{
+			connection.query(sql2,function(err,results){
+				if(err){
+					console.log(err);
+				}
+				if(results.length>0){
+					r=true;
+				}
+			});
+		}
+		if(r){
+			res.sendFile(serverPath+'appointment.html');
+		}
+		else
+			res.redirect('back');
 	});
+	
 });
 
-function checkForDoctor (req) {
-	var sql2='SELECT `DoctorID` FROM `doctor` WHERE username="'+req.body.username+'" AND password="'+req.body.password+'"' ; 
-	connection.query(sql2,function(err,results){
-		if(err)
-			console.log(err);
-		if(results.length>0){
-			return true;
-		}
-	});
-}
+
 
 app.post('api/user',function(req,res) {
 	console.log(req.body);
