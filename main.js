@@ -219,12 +219,12 @@ app.post('/api/user', function (req, res) {
 						file.pipe(fstream);
 						
 						fstream.on('close',function(){
-							res.redirect('/index.html');
+							res.redirect('/logout.html');
 						});
 					}
 				});
 			} else{
-				res.redirect('back');
+				res.redirect('/user.html');
 			}
 		}else {
 			console.log("picture isn't uploaded\n");
