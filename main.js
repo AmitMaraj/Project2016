@@ -11,7 +11,7 @@ app.set('port', process.env.PORT || 5000);
 // static path to the public folder for client files to display
 var serverPath = __dirname + '/public/';
 app.use(express.static(serverPath));
-app.use(express.static(__dirname + '/public/js/)'));
+app.use(express.static(serverPath + 'js/'));
 
 // parse application/json http body
 app.use(bodyParser.json());
@@ -28,7 +28,6 @@ var connection = mysql.createConnection({
 	user: 'softenghospital',
 	password: 'softenghospital',
 	database: 'hospitaldb',
-	multipleStatements: true
 });
 
 
@@ -134,38 +133,34 @@ app.get('/api/getSurgery', function (req, res) {
 */
 app.post('/api/checkUser', function(req,res){
 	console.log(req.body);
-	var r=false;
 	var sql='SELECT `username`, `password` FROM `patientinfo` WHERE username="'+req.body.username+'" AND password="'+req.body.password+'"';
-	var sql2='SELECT `DoctorID` FROM `doctor` WHERE username="'+req.body.username+'" AND password="'+req.body.password+'"' ; 
 	connection.query(sql,function(err,results){
 		console.log(results);
-		if (err) {
+		if (err||results.length==0) {
 			res.redirect('back');	
 		}
 		if(results.length==1){
 			console.log(results);
 			res.sendFile(serverPath+'makeAppointment.html');
 		}
-		else{
-			connection.query(sql2,function(err,results){
-				if(err){
-					console.log(err);
-				}
-				if(results.length>0){
-					r=true;
-				}
-			});
-		}
-		if(r){
-			res.sendFile(serverPath+'appointment.html');
-		}
-		else
-			res.redirect('back');
 	});
 	
 });
 
 
+app.post('/api/checkDoctor',function(req,res){
+
+	var sql2='SELECT `DoctorID` FROM `doctor` WHERE username="'+req.body.username+'" AND password="'+req.body.password+'"' ; 
+
+	connection.query(sql2,function(err,results){
+		if(err||results.length==0){
+			console.log(err);
+		}
+		if(results.length==1){
+			res.sendFile(serverPath+'appointment.html');
+		}
+	});
+});
 
 app.post('api/user',function(req,res) {
 	console.log(req.body);
