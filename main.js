@@ -3,7 +3,9 @@ var express = require('express'),
 	mysql = require('mysql'),
 	busboy = require('connect-busboy'),
 	fs = require('fs'),
-    app = express();
+	CryptoJS = require('crypto-js'),
+    app = express(),
+    path = require('path');
 
 
 // modules
@@ -13,8 +15,9 @@ var DBACCESS = require('./DBConnection');
 app.set('port', process.env.PORT || 5000);
 
 // static path to the public folder for client files to display
-var serverPath = __dirname + '/public/';
+var serverPath = path.join(__dirname + '/public');
 app.use(express.static(serverPath));
+
 
 // parse application/json http body
 app.use(bodyParser.json());
@@ -26,10 +29,10 @@ app.use(busboy());
 
 
 // database connection setup
+
 var connection = DBACCESS.returnDBConnection();
 var SCHEDULING = require('./Functions/scheduling');
 SCHEDULING.runSchedule();
-
 
 
 
@@ -48,7 +51,7 @@ connection.connect(function (err) {
 // user request for homepage
 app.get('/', function (req, res) {
     console.log("request for homepage received");
-    res.sendFile(serverPath + 'scheduleSurgery.html');
+    res.sendFile(serverPath+'/login.html');
 });
 
 
@@ -99,7 +102,7 @@ app.post('/api/scheduleSurgery', function (req, res) {
 			res.send('1');
 		}
 	});
-	res.sendFile(serverPath + 'scheduleSurgery.html');
+	res.sendFile(serverPath+'/scheduleSurgery.html');
 });
 
 
@@ -135,33 +138,41 @@ app.get('/api/getSurgery', function (req, res) {
 /* checks to see if the patient already exist in database.
 	returns 1 if exist else 0;
 */
-app.post('/api/checkUser', function (req, res) {
-
-	var sql = 'SELECT `lastname`, `firstname` FROM `patientinfo` WHERE `lastname`="' + req.body.lastname + '" AND `firstname`="' + req.body.firstname + '"';
-
-	connection.query(sql, function (err, rows) {
-		if (err) {
-			console.log("Error checking for user" + err);
-			res.send('0');
-			return;
+<<<<<<< HEAD
+app.post('/api/checkUser', function(req,res){
+	console.log(req.body);
+	var sql='SELECT `username`, `password` FROM `patientinfo` WHERE username="'+req.body.username+'" AND password="'+req.body.password+'"';
+	connection.query(sql,function(err,results){
+		console.log(results);
+		if (err||results.length==0) {
+			res.redirect('back');	
 		}
-		else if (rows.length == 1) {
-			console.log(rows);
-			if (addUser(req))
-				res.send('1');
-			else
-				res.send('0');
-			return;
+		if(results.length==1){
+			console.log(results);
+			res.sendFile(serverPath+'/makeAppointment.html');
 		}
-
-		res.send('0');
 	});
+	
 });
 
 
+app.post('/api/checkDoctor',function(req,res){
 
-function addUser(req) {
-	connection.query('INSERT INTO `patientinfo`(`lastname`, `firstname`, `age`, `sex`, `username`, `password`) VALUES ("' + req.body.lastname + '","' + req.body.firstname + '","' + req.body.age + '","' + req.body.sex + '","' + req.body.username + '","' + CryptoJS.SHA1(req.body.password).toString() + '"', function (err, results) {
+	var sql2='SELECT `DoctorID` FROM `doctor` WHERE username="'+req.body.username+'" AND password="'+req.body.password+'"' ; 
+
+	connection.query(sql2,function(err,results){
+		if(err||results.length==0){
+			console.log(err);
+		}
+		if(results.length==1){
+			res.sendFile(serverPath+'/appointment.html');
+		}
+	});
+});
+
+app.post('api/user',function(req,res) {
+	console.log(req.body);
+	connection.query('INSERT INTO `patientinfo`(`lastname`, `firstname`, `age`, `sex`, `username`, `password`) VALUES ("' + req.body.lname + '","' + req.body.fname + '","' + req.body.age + '","' + req.body.sex + '","' + req.body.username + '","' + CryptoJS.SHA1(req.body.password) + '"', function (err, results) {
 		if (err) {
 			console.log(err);
 			return false;
@@ -169,7 +180,7 @@ function addUser(req) {
 		else
 			return true;
 	});
-}
+});
 
 
 
@@ -213,14 +224,14 @@ app.post('/api/user', function (req, res) {
 					} else {
 						console.log("data uploading");
 						file.pipe(fstream);
-
-						fstream.on('close', function () {
-							res.redirect('/index.html');
+						
+						fstream.on('close',function(){
+							res.redirect('/login.html');
 						});
 					}
 				});
-			} else {
-				res.redirect('/');
+			} else{
+				res.redirect('/user.html');
 			}
 		} else {
 			console.log("picture isn't uploaded\n");
@@ -237,14 +248,3 @@ app.listen(app.get('port'), function () {
 });
 
 
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////

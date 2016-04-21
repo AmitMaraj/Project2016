@@ -3,12 +3,8 @@
 
 <head>
     <title>MediBase</title>
-    <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
-    <script type="text/javascript" src="bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
 
 </head>
 
@@ -18,7 +14,7 @@
 
     <h1>Appointment Schedule</h1> 
 
-    <form name="form" method="POST" action="/api/makeAppointment" enctype="multipart/form-data">
+    <form name="form" method="POST" action="/api/makeAppointment">
         <label for="hospitalName">Select hospital</label>
         <select>
             <option value="1">Mt. Hope</option>
