@@ -11,7 +11,6 @@ app.set('port', process.env.PORT || 5000);
 
 // static path to the public folder for client files to display
 var serverPath = path.join(__dirname + '/public');
-app.use(express.static(serverPath + '/js'));
 app.use(express.static(serverPath));
 
 
