@@ -4,14 +4,16 @@ var express = require('express'),
 	busboy = require('connect-busboy'),
 	fs = require('fs'),
 	CryptoJS = require('crypto-js'),
-    app = express();
+    app = express(),
+    path = require('path');
 
 app.set('port', process.env.PORT || 5000);
 
 // static path to the public folder for client files to display
-var serverPath = __dirname + '/public/';
+var serverPath = path.join(__dirname + '/public');
+app.use(express.static(serverPath + '/js'));
 app.use(express.static(serverPath));
-app.use(express.static(serverPath + 'js/'));
+
 
 // parse application/json http body
 app.use(bodyParser.json());
@@ -45,7 +47,7 @@ connection.connect(function (err) {
 // user request for homepage
 app.get('/', function (req, res) {
     console.log("request for homepage received");
-    res.sendFile(serverPath+'login.html');
+    res.sendFile(serverPath+'/login.html');
 });
 
 
@@ -95,7 +97,7 @@ app.post('/api/scheduleSurgery', function (req,res){
 			res.send('1');
 		}
 	});
-	res.sendFile(serverPath+'scheduleSurgery.html');
+	res.sendFile(serverPath+'/scheduleSurgery.html');
 });
 
 
@@ -141,7 +143,7 @@ app.post('/api/checkUser', function(req,res){
 		}
 		if(results.length==1){
 			console.log(results);
-			res.sendFile(serverPath+'makeAppointment.html');
+			res.sendFile(serverPath+'/makeAppointment.html');
 		}
 	});
 	
@@ -157,7 +159,7 @@ app.post('/api/checkDoctor',function(req,res){
 			console.log(err);
 		}
 		if(results.length==1){
-			res.sendFile(serverPath+'appointment.html');
+			res.sendFile(serverPath+'/appointment.html');
 		}
 	});
 });

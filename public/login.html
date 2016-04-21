@@ -5,6 +5,7 @@
     <title>MediBase</title>
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
     <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="styles.css">
 
 </head>
 
@@ -13,69 +14,45 @@
 
   <div class="container">
 
+  <legend>Log In</legend>
 
-    <form class="form-horizontal" id="loginForm" method="post" action="/api/checkUser">
-        <fieldset>
+  <form class="form-horizontal" id="loginForm" method="post" action="/api/checkUser">
 
-    <div class="form-group">
-        <!-- change col-sm-N to reflect how you would like your column spacing (http://getbootstrap.com/css/#forms-control-sizes) -->
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-2 control-label">Username</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" id="password" name=password placeholder="Password">
+    </div>
+  </div>
+ 
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button id="sbtn" type="submit" class="btn btn-primary">Sign in</button>
+    </div>
+  </div>
 
 
-        <!-- Form Name -->
-        <legend>Log In</legend>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button onclick="window.location.href='user.html'" type="button" id="userbtn" name="user" class="btn btn-primary" aria-label="">Not a Patient?</button>
+    </div>
+  </div>
 
-        <!-- Text input http://getbootstrap.com/css/#forms -->
-        <div class="form-group">
-          <label for="username" class="control-label col-sm-2">Username</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="username" placeholder="username" required="" name="username">
-            <p class="help-block">patient username</p>
-          </div>
-        </div>
-        <!-- Text input http://getbootstrap.com/css/#forms -->
-        <div class="form-group">
-          <label for="password" class="control-label col-sm-2">Password</label>
-          <div class="col-sm-10">
-            <input type="password" class="form-control" id="password" placeholder="password" required="" name="password">
-            <p class="help-block">password</p>
-          </div>
-        </div>
-        <!-- Button http://getbootstrap.com/css/#buttons -->
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="login"></label>
-          <div class="text-left col-sm-10">
-            <button id="login" name="login" class="btn btn-primary" aria-label="" >Log In</button>
-            
-          </div>
-        </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button onclick="window.location.href='loginDoctor.html'" type="button" id="doctorbtn" name="user" class="btn btn-primary " aria-label="">Doctor Login</button>
+    </div>
+  </div>
 
-        <div class="row">
-          
-        
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="user"></label>
-          <div class="text-right col-sm-10">
-            <button onclick="window.location.href='user.html'" type="button" id="user" name="user" class="btn btn-primary" aria-label="">Already a Patient?</button>
-            
-          </div>
-        </div>
-  
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="user"></label>
-          <div class="text-right col-sm-10">
-            <button onclick="window.location.href='loginDoctor.html'" type="button" id="user" name="user" class="btn btn-primary" aria-label="">Doctor Login</button>
-            
-          </div>
-        </div>
-
-        </div>
-        </fieldset>
-
-        </div>
-        </form>
+</form>
     
-        <div id="invalid"></div>
-
 </div>
 </body>
 
