@@ -219,7 +219,7 @@ app.post('/api/user', function (req, res) {
 						file.pipe(fstream);
 						
 						fstream.on('close',function(){
-							res.redirect('/logout.html');
+							res.redirect('/login.html');
 						});
 					}
 				});
