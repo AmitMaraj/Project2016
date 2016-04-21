@@ -138,7 +138,6 @@ app.get('/api/getSurgery', function (req, res) {
 /* checks to see if the patient already exist in database.
 	returns 1 if exist else 0;
 */
-<<<<<<< HEAD
 app.post('/api/checkUser', function(req,res){
 	console.log(req.body);
 	var sql='SELECT `username`, `password` FROM `patientinfo` WHERE username="'+req.body.username+'" AND password="'+req.body.password+'"';
