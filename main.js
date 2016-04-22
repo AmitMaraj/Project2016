@@ -140,7 +140,7 @@ app.get('/api/getSurgery', function (req, res) {
 */
 app.post('/api/checkUser', function(req,res){
 	console.log(req.body);
-	var sql='SELECT `username`, `password` FROM `patientinfo` WHERE username="'+req.body.username+'" AND password="'+req.body.password+'"';
+	var sql='SELECT `username`, `password` FROM `patientinfo` WHERE username="'+req.body.username+'" AND password="'+req.body.password+'" LIMIT 1';
 	connection.query(sql,function(err,results){
 		console.log(results);
 		if (err||results.length==0) {
@@ -169,17 +169,11 @@ app.post('/api/checkDoctor',function(req,res){
 	});
 });
 
-app.post('api/user',function(req,res) {
-	console.log(req.body);
-	connection.query('INSERT INTO `patientinfo`(`lastname`, `firstname`, `age`, `sex`, `username`, `password`) VALUES ("' + req.body.lname + '","' + req.body.fname + '","' + req.body.age + '","' + req.body.sex + '","' + req.body.username + '","' + CryptoJS.SHA1(req.body.password) + '"', function (err, results) {
-		if (err) {
-			console.log(err);
-			return false;
-		}
-		else
-			return true;
-	});
+
+app.post('/api/makeAppointment',function(req,res){
+	res.sendFile(serverPath+'/makeAppointment.html');
 });
+
 
 
 

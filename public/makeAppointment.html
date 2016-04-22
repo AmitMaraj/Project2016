@@ -14,7 +14,7 @@
 
     <h1>Appointment Schedule</h1> 
 
-    <form name="form" method="POST" action="/api/makeAppointment">
+    <form name="form" method="post" action="/api/makeAppointment">
         <label for="hospitalName">Select hospital</label>
         <select>
             <option value="1">Mt. Hope</option>
@@ -86,7 +86,7 @@
         </table>
         
         <br>
-        <button id="appointmentBtn" type="submit">make Appointment</button>
+        <button id="appointmentBtn" type="submit" onclick="window.location.href='/appointment.html'">make Appointment</button>
     </form>
 
 </body>
