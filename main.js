@@ -163,17 +163,11 @@ app.post('/api/checkDoctor',function(req,res){
 	});
 });
 
-app.post('api/user',function(req,res) {
-	console.log(req.body);
-	connection.query('INSERT INTO `patientinfo`(`lastname`, `firstname`, `age`, `sex`, `username`, `password`) VALUES ("' + req.body.lname + '","' + req.body.fname + '","' + req.body.age + '","' + req.body.sex + '","' + req.body.username + '","' + CryptoJS.SHA1(req.body.password) + '"', function (err, results) {
-		if (err) {
-			console.log(err);
-			return false;
-		}
-		else
-			return true;
-	});
+
+app.post('/api/makeAppointment',function(req,res){
+	res.sendFile(serverPath+'/makeAppointment.html');
 });
+
 
 
 
