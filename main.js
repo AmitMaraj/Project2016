@@ -134,7 +134,7 @@ app.get('/api/getSurgery', function (req, res) {
 */
 app.post('/api/checkUser', function(req,res){
 	console.log(req.body);
-	var sql='SELECT `username`, `password` FROM `patientinfo` WHERE username="'+req.body.username+'" AND password="'+req.body.password+'"';
+	var sql='SELECT `username`, `password` FROM `patientinfo` WHERE username="'+req.body.username+'" AND password="'+req.body.password+'" LIMIT 1';
 	connection.query(sql,function(err,results){
 		console.log(results);
 		if (err||results.length==0) {
